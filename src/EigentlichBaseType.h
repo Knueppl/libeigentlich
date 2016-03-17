@@ -2,6 +2,7 @@
 #define ___EIGENTLICH_BASE_TYPE_H___
 
 #include <string>
+#include <random>
 
 class EigentlichBaseType
 {
@@ -15,8 +16,8 @@ protected:
         STRING,
     };
 
-    EigentlichBaseType(void);
-    EigentlichBaseType(const auto value);
+    EigentlichBaseType(const Type type);
+    EigentlichBaseType(const Type type, const auto value);
 
     Type _type;
 
@@ -30,6 +31,13 @@ protected:
 //        Data() { }
 //        ~Data() { }
     } _data;
+
+private:
+    Type chooseType(const Type type);
+
+    static std::random_device s_randomDevice;
+    static std::mt19937 s_randomGenerator;
+    static std::normal_distribution<float> s_distribution;
 };
 
 #endif
