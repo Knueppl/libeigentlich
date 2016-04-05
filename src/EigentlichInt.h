@@ -6,8 +6,8 @@
 class EigentlichInt : public EigentlichBaseType
 {
 public:
-    EigentlichInt(void);
-    EigentlichInt(const auto value);
+    EigentlichInt(void) : EigentlichBaseType(EigentlichBaseType::INT) { }
+    EigentlichInt(const auto value) : EigentlichBaseType(EigentlichBaseType::INT, value) { }
 };
 
 #endif
