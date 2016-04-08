@@ -35,16 +35,32 @@ protected:
 
     void setValue(const auto value);
 
-    static std::string typeName(const Type type);
+//    EigentlichBaseType operator+(const EigentlichBaseType& right);
 
 private:
+
+    enum Operator {
+        ADD = 0,
+        SUB,
+        MUL,
+        DIV,
+        COUNT_OPERATOR
+    };
+
+//    EigentlichBaseType doOperation(const EigentlichBaseType right, const Operator op);
     Type chooseType(const Type type);
+    Operator chooseOperator(const Operator op);
+    bool isAccepted(void);
+
+    static std::string typeName(const Type type);
+    static std::string operatorName(const Operator op);
 
     static float s_sigma;
     static std::random_device s_randomDevice;
     static std::mt19937 s_randomGenerator;
     static std::normal_distribution<float> s_keepTypeDistribution;
     static std::uniform_int_distribution<int> s_chooseTypeDistribution;
+    static std::uniform_int_distribution<int> s_chooseOperatorDistribution;
 };
 
 #endif
