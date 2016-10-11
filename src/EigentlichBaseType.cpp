@@ -1,11 +1,10 @@
 #include "EigentlichBaseType.h"
 
-#include <iostream>
-
 float EigentlichBaseType::s_sigma = 1.0f;
 std::random_device EigentlichBaseType::s_randomDevice;
 std::mt19937 EigentlichBaseType::s_randomGenerator(s_randomDevice());
 std::normal_distribution<float> EigentlichBaseType::s_keepTypeDistribution(0.0, s_sigma);
+std::normal_distribution<float> EigentlichBaseType::s_keepOperationDistribution(0.0, s_sigma);
 std::uniform_int_distribution<int>
 EigentlichBaseType::s_chooseTypeDistribution(0, EigentlichBaseType::COUNT_TYPE - 1);
 std::uniform_int_distribution<int>
@@ -18,36 +17,100 @@ EigentlichBaseType::EigentlichBaseType(const Type type)
 
 }
 
-EigentlichBaseType::EigentlichBaseType(const Type type, const auto value)
-    : _type(this->chooseType(type))
-{
-    this->setValue(value);
-}
-
-void EigentlichBaseType::setValue(const auto value)
+int EigentlichBaseType::getInt(void) const
 {
     switch (_type)
     {
     case INT:
-        _data._int = value;
-        break;
+        return _data._int;
 
     case UINT:
-        _data._uint = value;
-        break;
+        return _data._uint;
 
     case FLOAT:
-        _data._float = value;
-        break;
+        return _data._float;
 
     case DOUBLE:
-        _data._double = value;
-        break;
+        return _data._double;
 
     default:
-        std::cout << __PRETTY_FUNCTION__ << ": operation with this type is no be implemented." << std::endl;
+        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
         break;
     }
+
+    return 0;
+}
+
+unsigned int EigentlichBaseType::getUnsignedInt(void) const
+{
+    switch (_type)
+    {
+    case INT:
+        return _data._int;
+
+    case UINT:
+        return _data._uint;
+
+    case FLOAT:
+        return _data._float;
+
+    case DOUBLE:
+        return _data._double;
+
+    default:
+        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
+        break;
+    }
+
+    return 0;
+}
+
+float EigentlichBaseType::getFloat(void) const
+{
+    switch (_type)
+    {
+    case INT:
+        return _data._int;
+
+    case UINT:
+        return _data._uint;
+
+    case FLOAT:
+        return _data._float;
+
+    case DOUBLE:
+        return _data._double;
+
+    default:
+        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
+        break;
+    }
+
+    return 0;
+}
+
+double EigentlichBaseType::getDouble(void) const
+{
+    switch (_type)
+    {
+    case INT:
+        return _data._int;
+
+    case UINT:
+        return _data._uint;
+
+    case FLOAT:
+        return _data._float;
+
+    case DOUBLE:
+        return _data._double;
+
+    default:
+        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
+        break;
+    }
+
+    return 0;
 }
 
 //EigentlichBaseType EigentlichBaseType::operator+(const EigentlichBaseType& right)
@@ -110,12 +173,12 @@ std::string EigentlichBaseType::operatorName(const Operator op)
 //    }
 //}
 
-EigentlichBaseType::Type EigentlichBaseType::chooseType(const Type type)
+EigentlichBaseType::Type EigentlichBaseType::chooseType(const Type type) const
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
 
     // Dice if the type will be accepted.
-    const bool accepted = this->isAccepted();
+    const bool accepted = this->keepType ();
     std::cout << "accept type " << this->typeName(type) << " ? --> " << (accepted ? "jep" : "nope") << std::endl;
 
     // If the type is not be accepted choose a new one.
@@ -130,12 +193,12 @@ EigentlichBaseType::Type EigentlichBaseType::chooseType(const Type type)
     return newType;
 }
 
-EigentlichBaseType::Operator EigentlichBaseType::chooseOperator(const Operator op)
+EigentlichBaseType::Operator EigentlichBaseType::chooseOperator(const Operator op) const
 {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
 
     // Dice if the operator will be accepted.
-    const bool accepted = this->isAccepted();
+    const bool accepted = this->keepOperator();
     std::cout << "accpet operator " << this->operatorName(op) << " ? --> " << (accepted ? "jep" : "nope")
               << std::endl;
 
@@ -151,7 +214,13 @@ EigentlichBaseType::Operator EigentlichBaseType::chooseOperator(const Operator o
     return newOperator;
 }
 
-bool EigentlichBaseType::isAccepted(void)
+bool EigentlichBaseType::keepType(void) const
 {
     return s_keepTypeDistribution(s_randomGenerator) < s_sigma;
 }
+
+bool EigentlichBaseType::keepOperator(void) const
+{
+    return s_keepOperationDistribution(s_randomGenerator) < s_sigma;
+}
+
