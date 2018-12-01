@@ -8,21 +8,30 @@
 class EigentlichBaseType
 {
 protected:
-    enum Type {
+    enum class Type {
         INT = 0,
         UINT,
         FLOAT,
         DOUBLE,
-        STRING,
+//        STRING,
         COUNT_TYPE
     };
 
+    // Operator stuff.
+    enum class Operator {
+        ADD = 0,
+        SUB,
+        MUL,
+        DIV,
+        COUNT_OPERATOR
+    };
+
+    EigentlichBaseType(void) = delete;
     explicit EigentlichBaseType(const Type type);
-    explicit EigentlichBaseType(const Type type, const auto value)
-        : _type(this->chooseType(type))
-    {
-        this->setValue(value);
-    }
+    explicit EigentlichBaseType(const int value);
+    explicit EigentlichBaseType(const unsigned int value);
+    explicit EigentlichBaseType(const float value);
+    explicit EigentlichBaseType(const double value);
     virtual ~EigentlichBaseType(void) = default;
 
     Type _type;
@@ -38,24 +47,24 @@ protected:
 //        ~Data() { }
     } _data;
 
-public:
-    void setValue(const auto value)
+    template <class T>
+    void setValue(const T value)
     {
          switch (_type)
         {
-        case INT:
+        case Type::INT:
             _data._int = value;
             break;
 
-        case UINT:
+        case Type::UINT:
             _data._uint = value;
             break;
 
-        case FLOAT:
+        case Type::FLOAT:
             _data._float = value;
             break;
 
-        case DOUBLE:
+        case Type::DOUBLE:
             _data._double = value;
             break;
 
@@ -65,20 +74,86 @@ public:
         }
     }
 
-    int getInt(void) const;
-    unsigned int getUnsignedInt(void) const;
-    float getFloat(void) const;
-    double getDouble(void) const;
+    template <class T>
+    T& value(void) 
+    {
+        switch (_type)
+        {
+        case Type::INT:
+            return _data._int;
 
-protected:
-    // Operator stuff.
-    enum Operator {
-        ADD = 0,
-        SUB,
-        MUL,
-        DIV,
-        COUNT_OPERATOR
-    };
+        case Type::UINT:
+            return _data._uint;
+
+        case Type::FLOAT:
+            return _data._float;
+
+        case Type::DOUBLE:
+            return _data._double;
+
+        default:
+            std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
+            break;
+        }
+
+        return 0;
+    }
+
+    template <class T>
+    T value(void) const
+    {
+        switch (_type)
+        {
+        case Type::INT:
+            return _data._int;
+
+        case Type::UINT:
+            return _data._uint;
+
+        case Type::FLOAT:
+            return _data._float;
+
+        case Type::DOUBLE:
+            return _data._double;
+
+        default:
+            std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
+            break;
+        }
+
+        return 0;
+    }
+
+    template <class T>
+    T performOperation(const Operator op, const EigentlichBaseType& right) const
+    {
+        T result = this->value<T>();
+
+        switch(this->chooseOperator(op))
+        {
+        case Operator::ADD:
+            result += right.value<T>();
+            break;
+
+        case Operator::SUB:
+            result -= right.value<T>();
+            break;
+
+        case Operator::MUL:
+            result *= right.value<T>();
+            break;
+
+        case Operator::DIV:
+            result /= right.value<T>();
+            break;
+
+        default:
+            std::cout << __PRETTY_FUNCTION__ << ": unkown operator." << std::endl;
+            return 0;
+        }
+
+        return result;
+    }
 
     Operator chooseOperator(const Operator op) const;
 

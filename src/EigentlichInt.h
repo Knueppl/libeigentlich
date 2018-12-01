@@ -6,19 +6,39 @@
 class EigentlichInt : public EigentlichBaseType
 {
 public:
-    EigentlichInt(void) : EigentlichBaseType(EigentlichBaseType::INT) { }
-    EigentlichInt(const int value) : EigentlichBaseType(EigentlichBaseType::INT, value) { }
+    EigentlichInt(void) : EigentlichBaseType(EigentlichBaseType::Type::INT) { }
+    EigentlichInt(const int value) : EigentlichBaseType(value) { }
     virtual ~EigentlichInt(void) = default;
 
-    EigentlichInt operator +(const EigentlichBaseType& right) const;
+    EigentlichInt operator+(const EigentlichInt& right) const
+    {
+        return { this->performOperation<int>(Operator::ADD, right) };
+    }
+    EigentlichInt operator-(const EigentlichInt& right) const
+    {
+        return { this->performOperation<int>(Operator::SUB, right) };
+    }
+    EigentlichInt operator*(const EigentlichInt& right) const
+    {
+        return { this->performOperation<int>(Operator::MUL, right) };
+    }
+    EigentlichInt operator/(const EigentlichInt& right) const
+    {
+        return { this->performOperation<int>(Operator::DIV, right) };
+    }
 
-private:
-    int performOperation(const Operator op, const EigentlichBaseType& right) const;
+    EigentlichInt& operator=(const EigentlichInt& right)
+    {
+        this->setValue<int>(right.value<int>());
+        return *this;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const EigentlichInt& value);
 };
 
 std::ostream& operator<<(std::ostream& os, const EigentlichInt& value)
 {
-    os << value.getInt();
+    os << value.value<int>();
     return os;
 }
 

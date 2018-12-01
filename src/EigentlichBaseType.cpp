@@ -6,9 +6,9 @@ std::mt19937 EigentlichBaseType::s_randomGenerator(s_randomDevice());
 std::normal_distribution<float> EigentlichBaseType::s_keepTypeDistribution(0.0, s_sigma);
 std::normal_distribution<float> EigentlichBaseType::s_keepOperationDistribution(0.0, s_sigma);
 std::uniform_int_distribution<int>
-EigentlichBaseType::s_chooseTypeDistribution(0, EigentlichBaseType::COUNT_TYPE - 1);
+EigentlichBaseType::s_chooseTypeDistribution(0, static_cast<int>(EigentlichBaseType::Type::COUNT_TYPE) - 1);
 std::uniform_int_distribution<int>
-EigentlichBaseType::s_chooseOperatorDistribution(0, EigentlichBaseType::COUNT_OPERATOR - 1);
+EigentlichBaseType::s_chooseOperatorDistribution(0, static_cast<int>(EigentlichBaseType::Operator::COUNT_OPERATOR) - 1);
 
 
 EigentlichBaseType::EigentlichBaseType(const Type type)
@@ -17,121 +17,46 @@ EigentlichBaseType::EigentlichBaseType(const Type type)
 
 }
 
-int EigentlichBaseType::getInt(void) const
+EigentlichBaseType::EigentlichBaseType(const int value)
+    : _type(this->chooseType(Type::INT))
 {
-    switch (_type)
-    {
-    case INT:
-        return _data._int;
-
-    case UINT:
-        return _data._uint;
-
-    case FLOAT:
-        return _data._float;
-
-    case DOUBLE:
-        return _data._double;
-
-    default:
-        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
-        break;
-    }
-
-    return 0;
+    this->setValue<int>(value);
 }
 
-unsigned int EigentlichBaseType::getUnsignedInt(void) const
+EigentlichBaseType::EigentlichBaseType(const unsigned int value)
+    : _type(this->chooseType(Type::UINT))
 {
-    switch (_type)
-    {
-    case INT:
-        return _data._int;
-
-    case UINT:
-        return _data._uint;
-
-    case FLOAT:
-        return _data._float;
-
-    case DOUBLE:
-        return _data._double;
-
-    default:
-        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
-        break;
-    }
-
-    return 0;
+    this->setValue<unsigned int>(value);
 }
 
-float EigentlichBaseType::getFloat(void) const
+EigentlichBaseType::EigentlichBaseType(const float value)
+    : _type(this->chooseType(Type::FLOAT))
 {
-    switch (_type)
-    {
-    case INT:
-        return _data._int;
-
-    case UINT:
-        return _data._uint;
-
-    case FLOAT:
-        return _data._float;
-
-    case DOUBLE:
-        return _data._double;
-
-    default:
-        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
-        break;
-    }
-
-    return 0;
+    this->setValue<float>(value);
 }
 
-double EigentlichBaseType::getDouble(void) const
+EigentlichBaseType::EigentlichBaseType(const double value)
+    : _type(this->chooseType(Type::DOUBLE))
 {
-    switch (_type)
-    {
-    case INT:
-        return _data._int;
-
-    case UINT:
-        return _data._uint;
-
-    case FLOAT:
-        return _data._float;
-
-    case DOUBLE:
-        return _data._double;
-
-    default:
-        std::cout << __PRETTY_FUNCTION__ << ": method for the given type is not implemented." << std::endl;
-        break;
-    }
-
-    return 0;
+    this->setValue<double>(value);
 }
 
-//EigentlichBaseType EigentlichBaseType::operator+(const EigentlichBaseType& right)
-//{
-//
-//}
+
 
 std::string EigentlichBaseType::typeName(const Type type)
 {
     switch (type)
     {
-    case INT:
+    case Type::INT:
         return "INT";
-    case UINT:
+    case Type::UINT:
         return "UINT";
-    case FLOAT:
+    case Type::FLOAT:
         return "FLOAT";
-    case DOUBLE:
+    case Type::DOUBLE:
         return "DOUBLE";
-    case STRING:
-        return "STRING";
+//    case Type::STRING:
+//        return "STRING";
     default:
         return "UNKOWN TYPE";
     }
@@ -141,37 +66,18 @@ std::string EigentlichBaseType::operatorName(const Operator op)
 {
     switch (op)
     {
-    case ADD:
+    case Operator::ADD:
         return "ADD";
-    case SUB:
+    case Operator::SUB:
         return "SUB";
-    case MUL:
+    case Operator::MUL:
         return "MUL";
-    case DIV:
+    case Operator::DIV:
         return "DIV";
     default:
         return "UNKOWN OPERATOR";
     }
 }
-
-//EigentlichBaseType EigentlichBaseType::doOperation(const EigentlichBaseType right, const Operator op)
-//{
-//    switch (op)
-//    {
-//    case ADD:
-//
-//        switch (right._type)
-//        {
-//        case INT:
-//
-//            switch (_type)
-//            {
-//            case INT:
-//                
-//            }
-//        }
-//    }
-//}
 
 EigentlichBaseType::Type EigentlichBaseType::chooseType(const Type type) const
 {
